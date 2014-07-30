@@ -7,10 +7,15 @@ module Redland
     # Loads the FFI library.
     def load_ffi
       if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx"
-        if const_defined? "Rubinius::FFI"
+        begin
           extend Rubinius::FFI::Library
-        else
-          extend FFI::Library
+        rescue NameError
+          begin
+            extend FFI::Library
+          rescue NameError
+            require "ffi"
+            extend FFI::Library
+          end
         end
       else # mri, jruby, etc
         require "ffi"
