@@ -6,7 +6,7 @@ module Redland
     # @api_private
     # Loads the FFI library.
     def load_ffi
-      if RUBY_ENGINE == "rbx"
+      if defined?(RUBY_ENGINE) && RUBY_ENGINE == "rbx"
         if const_defined? "Rubinius::FFI"
           extend Rubinius::FFI::Library
         else
