@@ -1,16 +1,36 @@
 # @api private
 # FFI bindings
 module Redland
-  # Handling FFI difference between MRI and Rubinius
-  if !defined?(RUBY_ENGINE) || RUBY_ENGINE == 'ruby'
-    require 'ffi'
-    extend FFI::Library
-    ffi_lib "rdf"
-  else
-    # TODO: This might be outdated already, check with Rubinius
-    extend FFI::Library
-    ffi_lib "librdf.so.0"
+
+  class << self
+    # @api_private
+    # Loads the FFI library.
+    def load_ffi
+      if RUBY_ENGINE == "rbx"
+        if const_defined? "Rubinius::FFI"
+          extend Rubinius::FFI::Library
+        else
+          extend FFI::Library
+        end
+      else # mri, jruby, etc
+        require "ffi"
+        extend FFI::Library
+      end
+    end
+    # @api_private
+    # Loads the librdf shared library.
+    def load_librdf
+      load_ffi
+
+      begin
+        ffi_lib "rd"
+      rescue LoadError
+        ffi_lib "librdf.so.0"
+      end
+    end
   end
+
+  Redland::load_librdf
 
   # World
   attach_function :librdf_new_world, [], :pointer
