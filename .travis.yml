@@ -12,6 +12,4 @@ rvm:
   - 2.1.2
   - rbx-2
   - jruby
-  - jruby-head
-  - ruby-head
 cache: bundler
