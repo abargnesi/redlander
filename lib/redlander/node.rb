@@ -12,7 +12,10 @@ module Redlander
 
       # @api private
       def finalize_node(rdf_node_ptr)
-        proc { Redland.librdf_free_node(rdf_node_ptr) }
+        proc {
+          #Redland.librdf_node_get_type(rdf_node_ptr)
+          #Redland.librdf_free_node(rdf_node_ptr)
+        }
       end
     end
 
