@@ -31,7 +31,7 @@ module Redlander
       format = options[:format].to_s
       mime_type = options[:mime_type] && options[:mime_type].to_s
       type_uri = options[:type_uri] && options[:type_uri].to_s
-      base_uri = options[:base_uri] && options[:base_uri].to_s
+      base_uri = Uri.new(options[:base_uri].to_s).rdf_uri if options[:base_uri]
       content = Uri.new(content) if content.is_a?(URI)
 
       # FIXME: to be fixed in librdf:
